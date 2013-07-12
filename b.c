@@ -3,7 +3,8 @@
 int main()
 {
 	int a=10;
-	printf("a is %d\n",a);
+	int b=5;
+	printf("a+b is %d\n",a+b);
 
 }
 
