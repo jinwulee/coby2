@@ -1,0 +1,14 @@
+CC=gcc -g -lsqlite3
+
+INC = -I/include
+LIB = -L/lib -lc
+
+all:a 
+
+a:a.o
+	$(CC) -o $@ $< $(LIB)
+a.o:a.c
+	$(CC) -c $< $(INC)
+
+c:
+	rm -rf a a.o

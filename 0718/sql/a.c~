@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <sqlite3.h>
+#include <stdlib.h>
+#include <string.h>
+int main(int argc,char *argv[])
+{
+	sqlite3_stmt* stmt;
+	sqlite3 *handle;
+	int retval;
+	char input[20];
+	char sqlStr[100]="select * from phone_book WHERE address LIKE '%";
+	retval=sqlite3_open("phone_book.db",&handle);
+
+	if(retval)
+	{
+		printf("연결실패\n");
+		return -1;
+	}
+	printf("연결성공\n");
+
+	strcpy(input,argv[1]);
+	strcat(sqlStr,input);
+	strcat(sqlStr,"%'");
+	printf("%s\t\n",sqlStr);
+//	sqlStr="select * from phone_book";
+	retval=sqlite3_prepare_v2(handle,sqlStr,-1,&stmt,0);
+
+	if(retval==SQLITE_OK)
+	{
+		int ncols=sqlite3_column_count(stmt);
+		int ncol=0;
+		printf("stmt=%d\n",ncols);
+
+		for(ncol;ncol<ncols;ncol++)
+			printf("%s\t",sqlite3_column_name(stmt,ncol));
+
+		printf("\n");
+		while((retval=sqlite3_step(stmt))==SQLITE_ROW)
+			for(ncol=0;ncol<ncols;ncol++)
+			{
+				printf("%s\t",sqlite3_column_text(stmt,ncol));
+				if(ncol%2==1) printf("\n");
+			}
+		printf("\n");
+	}
+
+	return 0;
+}
