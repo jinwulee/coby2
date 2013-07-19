@@ -1,5 +1,7 @@
 #include <sys/types.h>
 #include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
 static int glob=6;
 char buf[]="a write to stdout\n";
 
@@ -13,22 +15,25 @@ int main(void)
 		perror("write error");
 	printf("befor fork\n");
 
-	if((pid=vfork())<0)
+	if((pid=fork())<0)
 		perror("fork error");
 	else if(pid==0)
 	{
+		sleep(2);
 		glob++;
 		var++;
+		printf("child");
 		printf("pid=%d, glob=%d, var=%d\n",getpid(),glob,var);
-		_exit(0);
+//		sleep(10);	
+		
+
 
 	}
 	else
-	{
+	{	
 		sleep(2);
-
-	printf("pid=%d, glob=%d, var=%d\n",getpid(),glob,var);
-	exit(0);
-	}
-			
+		
+		printf("parent");
+		printf("pid=%d, glob=%d, var=%d\n",getpid(),glob,var);
+	}			
 }
